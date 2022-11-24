@@ -16,5 +16,50 @@ pipeline {
         }
       }
     }
+    stage('Deploy pods'){
+            when {
+                expression {
+                    return env.dockerBuildResult ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
+                }
+            }
+            steps{
+                script{
+                    try{
+                        sh """
+                        #!/bin/bash
+                         cat>web_deploy.yaml<
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
+        ports:
+        - containerPort: 5000
+EOF"""
+                        sh "pwd"
+                        sh "/home/jenkins/bin/kubectl apply -f /var/lib/jenkins/workspace/Deploy_SREBGK_MonthlyReport/deployfiles/monthly_deploy.yaml"
+                         env.deployPodsResult=true
+                    }catch(error){
+                        print(error)
+                         env.deployPodsResult=false
+                         currnetBuild.result='FAILURE'
+                    }
+                    
+                }
+            }
   }
 }
