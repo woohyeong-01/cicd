@@ -48,12 +48,12 @@ spec:
     spec:
       containers:
       - name: monthly-cont
-        image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
+        image: 402593391658.dkr.ecr.ap-northeast-2.amazonaws.com/test:""$BUILD_ID""
         ports:
         - containerPort: 5000
 EOF"""
                         sh "pwd"
-                        sh "/home/jenkins/bin/kubectl apply -f /var/lib/jenkins/workspace/Deploy_SREBGK_MonthlyReport/deployfiles/monthly_deploy.yaml"
+                        sh "/home/ec2-user/kubectl apply -f monthly_deploy.yaml"
                          env.deployPodsResult=true
                     }catch(error){
                         print(error)
