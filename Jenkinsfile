@@ -41,9 +41,9 @@ spec:
         image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
         ports:
         - containerPort: 5000
-EOF
-        sh "pwd"
-        sh "kubectl apply -f /home/ec2-user/web_deploy.yaml"
+EOF'
+        sh 'pwd'
+        sh 'kubectl apply -f /home/ec2-user/web_deploy.yaml'
                     }
                 }
     }
