@@ -16,6 +16,7 @@ pipeline {
           sh 'docker push 402593391658.dkr.ecr.ap-northeast-2.amazonaws.com/test:""$BUILD_ID""'
         }
       }
+    }
     stage('Deploy pods'){
       steps{
         sh 'cat <<EOF > web_deploy.yaml
