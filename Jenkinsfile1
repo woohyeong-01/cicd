@@ -16,19 +16,9 @@ pipeline {
           sh 'docker push 402593391658.dkr.ecr.ap-northeast-2.amazonaws.com/test:""$BUILD_ID""'
         }
       }
-    }
     stage('Deploy pods'){
-            when {
-                expression {
-                    return env.dockerBuildResult ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/
-                }
-            }
-            steps{
-                script{
-                    try{
-                        sh """
-                        #!/bin/bash
-                         cat>web_deploy.yaml<
+      steps{
+        sh 'cat <<EOF > web_deploy.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,17 +40,10 @@ spec:
         image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
         ports:
         - containerPort: 5000
-EOF"""
-                        sh "pwd"
-                        sh "kubectl apply -f /home/ec2-user/web_deploy.yaml"
-                         env.deployPodsResult=true
-                    }catch(error){
-                        print(error)
-                         env.deployPodsResult=false
-                         currnetBuild.result='FAILURE'
+EOF
+        sh "pwd"
+        sh "kubectl apply -f /home/ec2-user/web_deploy.yaml"
                     }
-                    
                 }
-            }
-  }
+    }
 }
