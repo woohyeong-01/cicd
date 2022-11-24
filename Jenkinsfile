@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
       - name: monthly-cont
-        image: ${ECR_TASK_URI}:ver${env.BUILD_NUMBER}
+        image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
         ports:
         - containerPort: 5000
 EOF"""
