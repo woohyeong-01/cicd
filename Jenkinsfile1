@@ -51,7 +51,7 @@ spec:
         - containerPort: 5000
 EOF"""
                         sh "pwd"
-                        sh "/home/jenkins/bin/kubectl apply -f /var/lib/jenkins/workspace/Deploy_SREBGK_MonthlyReport/deployfiles/monthly_deploy.yaml"
+                        sh "kubectl apply -f /home/ec2-user/web_deploy.yaml"
                          env.deployPodsResult=true
                     }catch(error){
                         print(error)
