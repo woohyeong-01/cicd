@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     try{
-                        git url: "https://$GIT_URL", branch: "master", credentialsId: "$GIT_CREDENTIALS_ID"
+                        git url: "https://$GIT_URL", branch: "main", credentialsId: "$GIT_CREDENTIALS_ID"
                         env.cloneResult=true
                     }catch(error){
                         print(error)
