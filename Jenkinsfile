@@ -19,7 +19,11 @@ pipeline {
     }
     stage('Deploy pods'){
       steps{
-        sh 'cat <<EOF > web_deploy.yaml
+        script{
+            try{
+                sh"""
+                #!/bin/bash
+                cat>web.yaml<<-EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,10 +45,12 @@ spec:
         image: ${ECR_TASK_URI}:ver${env.BUILD_ID}
         ports:
         - containerPort: 5000
-EOF'
-        sh 'pwd'
+EOF
+"""
         sh 'kubectl apply -f /home/ec2-user/web_deploy.yaml'
-                    }
-                }
+            }
+        }
+      }
     }
+  }
 }
